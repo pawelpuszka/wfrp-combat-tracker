@@ -21,18 +21,22 @@ class CharacterCard(BaseModel):
 
 
 
-# if __name__ == "__main__":
-#     brunon_witz = CharacterCard(
-#         name="Brunon Witz",
-#         type="player",
-#         character_stats=CharacterStats(
-#             WS=32, BS=44, S=31, T=28, I=43, Ag=44, Dex=29, Int=58, WP=49, Fel=36, fate=4, fortune=4, resilience=2, determination=2
-#         ),
-#         skills=[],
-#         talents=[],
-#         weapons=[],
-#         armor=[],
-#         notes=None
-#     )
+if __name__ == "__main__":
+    brunon_witz = CharacterCard(
+        name="Brunon Witz",
+        type="player",
+        character_stats=CharacterStats(
+            WS=32, BS=44, S=31, T=28, I=43, Ag=44, Dex=29, Int=58, WP=49, Fel=36, fate=4, fortune=4, resilience=2, determination=2
+        ),
+        skills=[],
+        talents=[],
+        weapons=[],
+        armor=[],
+        notes=None
+    )
 
-#     print(brunon_witz.model_dump())
+    # print(brunon_witz.model_dump())
+
+    import json
+    with open("data/characters/players/brunon_witz.json", 'w', encoding="utf-8") as f:
+        f.write(brunon_witz.model_dump_json(indent=4))

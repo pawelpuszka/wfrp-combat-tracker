@@ -1,0 +1,26 @@
+{
+    "id": "7f7b85a8-54b1-4b3d-b50c-1837c2d696cf",
+    "name": "Brunon Witz",
+    "type": "player",
+    "character_stats": {
+        "WS": 32,
+        "BS": 44,
+        "S": 31,
+        "T": 28,
+        "I": 43,
+        "Ag": 44,
+        "Dex": 29,
+        "Int": 58,
+        "WP": 49,
+        "Fel": 36,
+        "fate": 4,
+        "fortune": 4,
+        "resilience": 2,
+        "determination": 2
+    },
+    "skills": [],
+    "talents": [],
+    "weapons": [],
+    "armor": [],
+    "notes": null
+}
