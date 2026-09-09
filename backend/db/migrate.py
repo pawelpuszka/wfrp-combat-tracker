@@ -3,8 +3,6 @@ from sqlalchemy import text
 import sqlparse
 import sys
 
-def migrate_db_test(file):
-    print("Migracja z pliku: ", file)
 
 def migrate_db(file):
     print("START")

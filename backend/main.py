@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from backend.api.routes import characters
 
 app = FastAPI()
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+app.include_router(characters.router,  prefix="/api/characters", tags=["characters"])
