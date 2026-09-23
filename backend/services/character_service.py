@@ -13,7 +13,7 @@ class CharacterService():
         return CharacterCard.model_validate(data)
 
 
-    def upload_character_to_json(self, data: CharacterCard, card_type: str="players"):
+    def upload_character_to_json(self, data: CharacterCard, card_type: str):
         file_name: str = str(data.id) + ".json"
         path_to_file = Path("data/characters/") / card_type / file_name
         with open(path_to_file, 'w', encoding="utf-8") as file:

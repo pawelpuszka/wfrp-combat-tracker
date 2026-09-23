@@ -1,0 +1,18 @@
+POST http://localhost:8000/api/characters/?card_type=players
+Content-Type: application/json
+
+{
+    "name": "Brunon Witz",
+    "type": "player",
+    "character_stats": {
+        "WS": 32, "BS": 44, "S": 31, "T": 28,
+        "I": 43, "Ag": 44, "Dex": 29, "Int": 58,
+        "WP": 49, "Fel": 36,
+        "fate": 4, "fortune": 4,
+        "resilience": 2, "determination": 2
+    },
+    "skills": [],
+    "talents": [],
+    "weapons": [],
+    "armor": []
+}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from pathlib import Path
 from  fastapi import HTTPException
 from backend.services.character_service import CharacterService
@@ -21,3 +21,12 @@ def get_full_character_card(id: str, card_type="players") -> CharacterCard:
         return service.read_character_from_json(path_to_file=path_to_file)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Postać nie istnieje")
+
+
+@router.post("/")
+def create_character(character_card: CharacterCard, card_type: str="players"):
+    service = CharacterService()
+    service.upload_character_to_json(data=character_card, card_type=card_type)
+    return Response(status_code=201)
+
+    

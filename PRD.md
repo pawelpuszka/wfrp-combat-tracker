@@ -1,19 +1,32 @@
 # PRD — WFRP Combat Tracker
 # Product Requirements Document
 
-**Wersja:** 1.0  
-**Data:** 2026-06  
+**Wersja:** 1.2  
+**Data:** 2026-09  
 **Autor:** Paweł Puszka  
 **Status:** Draft  
+
+---
+
+## Changelog
+
+| Wersja | Zmiana |
+|--------|--------|
+| 1.0 | Wersja inicjalna |
+| 1.1 | Przewagi grupowe (Up in Arms), pełne 10 charakterystyk WFRP 4e |
+| 1.2 | Dodano mechanikę Momentum (WFRP 5e), aplikacja obsługuje obie edycje |
 
 ---
 
 ## 1. Cel produktu
 
 WFRP Combat Tracker to aplikacja webowa wspierająca Mistrzów Gry prowadzących
-sesje w systemie Warhammer Fantasy Roleplay 4. edycja (WFRP 4e). Walka w WFRP
-jest mechanicznie złożona — wymaga jednoczesnego śledzenia inicjatywy, punktów
-żywotności, punktów przewagi oraz cech broni i umiejętności wielu postaci naraz.
+sesje w systemie Warhammer Fantasy Roleplay. Aplikacja obsługuje dwie edycje:
+**4. edycję** (mechanika przewagi grupowej z dodatku Pod Bronią) oraz
+**5. edycję** (mechanika Momentum per postać).
+
+Walka w WFRP jest mechanicznie złożona — wymaga jednoczesnego śledzenia inicjatywy,
+punktów żywotności, stanu Momentum oraz cech broni i umiejętności wielu postaci naraz.
 Aplikacja ma zastąpić kartki, kostki i tablice przy stole, dając MG jedno, szybkie
 i czytelne narzędzie.
 
@@ -26,10 +39,10 @@ podczas sesji.
 
 | Persona | Opis | Główna potrzeba |
 |---------|------|-----------------|
-| **MG (Mistrz Gry)** | Doświadczony gracz RPG, prowadzi sesje WFRP 4e, ma ekran między sobą a graczami lub używa laptopa | Szybki dostęp do statystyk wszystkich uczestników walki na jednym ekranie |
+| **MG (Mistrz Gry)** | Doświadczony gracz RPG, prowadzi sesje WFRP 4e lub 5e, używa laptopa lub tabletu przy stole | Jeden ekran z całą walką: inicjatywa, żywotność, Momentum, przewaga grupowa, statystyki |
 | **Gracz (opcjonalnie)** | Może używać aplikacji do podglądu własnej postaci | Przeglądanie karty postaci, śledzenie żywotności |
 
-**Uwaga:** Priorytetem jest widok MG. Widok gracza (single character) jest opcjonalnym rozszerzeniem.
+**Uwaga:** Priorytetem jest widok MG. Widok gracza jest opcjonalnym rozszerzeniem.
 
 ---
 
@@ -46,11 +59,12 @@ ekranie, posortowanych według inicjatywy.
 - Wizualne wyróżnienie aktywnej postaci (czyja tura)
 - Przycisk „Następna tura" — przesuwa aktywną postać
 - Licznik rund
-- Licznik przewag oddzielnie dla BG i BN
-- Na każdym wierszy uczestnika widoczne:
+- Licznik przewag grupowych oddzielnie dla BG i BN (mechanika Pod Bronią / 4ed)
+- Na każdym wierszu uczestnika widoczne:
   - Nazwa postaci
   - Wynik inicjatywy
   - Aktualne / maksymalne punkty żywotności z paskiem postępu
+  - Znacznik Momentum (✓/✗) per postać (mechanika 5ed)
   - Lista aktywnych kondycji (Ogłuszony, Ranny itd.)
   - Przycisk rozwinięcia do pełnej karty postaci
 
@@ -63,97 +77,123 @@ ekranie, posortowanych według inicjatywy.
 | Krytyczny | <25% max Żyw | Czerwony |
 | Obezwładniony | 0 Żyw | Szary |
 
-### 3.2 Moduł: Punkty przewagi
+### 3.2 Moduł: Momentum (WFRP 5ed)
+
+Każdy uczestnik walki (BG i BN) może posiadać Momentum — stan binarny (masz / nie masz).
+
+**Funkcjonalności:**
+
+- Znacznik Momentum per postać — przełącznik ✓/✗
+- Tooltip po najechaniu na znacznik — wyświetla co można zrobić posiadając Momentum:
+  - Stałe akcje z bazy danych (`momentum_actions`)
+  - Talenty postaci które wymagają Momentum (`requires_momentum = TRUE`) — dynamiczne,
+    zależne od talentów konkretnej postaci
+
+**Mechanika WFRP 5e:**
+- Momentum zdobywa się wygrywając test przeciwstawny w walce wręcz
+- Momentum nie stackuje się — postać ma je albo nie
+- Momentum można wydać (utracić) na:
+  - Utrzymanie Przewagi (Advantage) do testów Walki Wręcz
+  - Dodatkowy atak drugą bronią
+  - Aktywację talentów (Furious Assault, Shieldsman, Disarm, Drilled)
+  - Bezpieczne zerwanie zwarcia (Disengage) bez testu
+  - Przekazanie sojusznikowi (darmowa akcja + test Dowodzenia)
+  - Przerwanie stanu walki w zwarciu (In-fighting)
+
+### 3.3 Moduł: Punkty przewagi grupowej (Pod Bronią / WFRP 4ed)
 
 Każda grupa biorąca udział w walce posiada licznik punktów przewagi (Advantage).
 
 **Funkcjonalności:**
 
-- Przycisk `+` i `−` przy grupie BG i BN
+- Dwa liczniki grupowe: jeden dla BG, jeden dla BN
+- Przycisk `+` i `−` dla każdej grupy
 - Licznik nie schodzi poniżej 0
 - Panel / tooltip „Co mogę zrobić za X punktów przewagi?" — wyświetla dostępne
   akcje na podstawie bieżącej liczby punktów (dane z bazy danych)
-- Przycisk zbiorowego resetu przewagi dla wszystkich uczestników
+- Przycisk zbiorowego resetu przewagi dla obu grup
 
-**Mechanika WFRP 4e (dla dewelopera):**
-- Przewaga ustalana jest ręcznie na podstawie przebiegu walki
-- Traci się ją całkowicie koniec rundy
+**Mechanika Pod Bronią (4ed):**
+- Przewaga ustalana ręcznie przez MG na podstawie przebiegu walki
+- Resetowana na końcu każdej rundy
 
-### 3.3 Moduł: Karta postaci
+### 3.4 Moduł: Karta postaci
 
-Uproszczona karta postaci — tylko informacje przydatne w walce. Nie jest to pełna
-karta z systemu.
+Uproszczona karta postaci — tylko informacje przydatne w walce.
 
-**Sekcja: Charakterystyki**
+**Sekcja: Charakterystyki (WFRP 4e/5e)**
 
-| Charakterystyka | Skrót | Opis |
-|----------------|-------|------|
-| Walka wręcz | WW | Testy ataków bronią białą |
-| Ustrzelenie | US | Testy ataków dystansowych |
-| Siła | S | Modyfikator obrażeń |
-| Wytrzymałość | Wt | Odporność na obrażenia |
-| Inicjatywa | I | Kolejność w walce |
-| Zwinność | Zw | Uniki i testy ruchowe |
-| Zręczność | Zr | Testy manualne |
-| Inteligencja | Int | Umiejętność pojmowania i zapamiętywania |
-| Siła Woli | SW | Możliwośći przeciwstawienia się złym wpływom |
-| Ogłada | Ogd | W oczach innych BN |
+| Skrót (kod) | Nazwa PL | Zastosowanie w walce |
+|-------------|----------|----------------------|
+| WS | Walka Wręcz | Testy ataków bronią białą |
+| BS | Ustrzelenie | Testy ataków dystansowych |
+| S | Siła | Modyfikator obrażeń |
+| T | Wytrzymałość | Odporność na obrażenia |
+| I | Inicjatywa | Kolejność w walce |
+| Ag | Zwinność | Uniki i testy ruchowe |
+| Dex | Zręczność | Testy manualne |
+| Int | Inteligencja | Umiejętność pojmowania |
+| WP | Siła Woli | Odporność na złe wpływy |
+| Fel | Ogłada | Wpływ na inne postacie |
+
+Dodatkowe pola: `fate`, `fortune`, `resilience`, `determination`
 
 **Sekcja: Żywotność**
-- Maksymalna i bieżąca wartość (edytowalna)
+- Maksymalna wartość (wyliczana na podstawie charakterystyk — Vitality)
+- Bieżąca wartość (edytowalna w trakcie walki)
 - Pasek postępu z kolorem
 
 **Sekcja: Umiejętności**
 - Lista umiejętności z liczbą rozwinięć
 - Na jakiej cesze oparta jest umiejętność
-- Wartość końcowa umiejętności (wartość cechy + liczba rozwinięć)
-- Po najechaniu kursorem na nazwę: tooltip z opisem (z bazy danych)
+- Wartość końcowa (wartość cechy + rozwinięcia)
+- Oznaczenie `for_combat` — tylko bojowe umiejętności w widoku walki
+- Tooltip po najechaniu — opis z bazy danych
 
 **Sekcja: Talenty**
-- Lista talentów postaci
-- Poziom talentu
-- Po najechaniu kursorem na nazwę: tooltip z opisem (z bazy danych)
+- Lista talentów postaci z poziomem (rank)
+- Oznaczenie `for_combat` — tylko bojowe talenty w widoku walki
+- Oznaczenie `requires_momentum` — talent wymaga Momentum do aktywacji
+- Tooltip po najechaniu — opis z bazy danych
 
 **Sekcja: Broń**
-- Tabela broni z kolumnami: Nazwa, Grupa, Obrażenia, Zasięg/Długość, Cechy
-- Po najechaniu na nazwę cechy broni: tooltip z opisem cechy (z bazy danych)
+- Tabela: Nazwa, Obrażenia (+ czy dodaje bonus z Siły)
+- Tooltip po najechaniu na cechę broni — opis z bazy danych
 
 **Sekcja: Pancerz**
-- Lista lokalizacji z wartością AP
+- Lista lokalizacji z wartością AP i karą pancerza
 
-### 3.4 Moduł: Zarządzanie postaciami (ładowanie sesji)
+### 3.5 Moduł: Zarządzanie postaciami
 
 Ekran startowy / zarządzanie postaciami przed walką.
 
 **Funkcjonalności:**
 
-- Lista dostępnych postaci (z plików JSON na dysku)
+- Lista dostępnych postaci z lokalnych plików JSON
 - Wyszukiwanie po nazwie
 - Filtrowanie: Bohaterowie Graczy / Przeciwnicy / Szablony
 - Wybór postaci do bieżącej sesji walki
 - Tworzenie nowej postaci (formularz → zapis do JSON)
 - Edycja istniejącej postaci
 - Usunięcie postaci
-- Import postaci z szablonu (klonowanie z nową nazwą)
+- Import z szablonu (klonowanie z nową nazwą)
 
-### 3.5 Moduł: Baza słownikowa (tylko admin)
-
-Interfejs administracyjny dostępny tylko dla właściciela aplikacji.
+### 3.6 Moduł: Baza słownikowa (tylko admin)
 
 **Funkcjonalności:**
 
-- Przeglądanie umiejętności, talentów, cech broni, akcji przewagi w bazie
-- Dodawanie i edycja wpisów (przez panel lub bezpośrednio w PostgreSQL)
-- Eksport wybranej postaci z JSON do PostgreSQL (do dzielenia z innymi MG)
+- Przeglądanie słowników w bazie danych
+- Dodawanie i edycja wpisów
+- Eksport postaci z JSON do PostgreSQL
 
 ---
 
 ## 4. Zakres — czego aplikacja NIE robi
 
-- ❌ Nie jest pełną kartą postaci (brak: rasy, profesji, języków, ekwipunku ogólnego, reputacji)
-- ❌ Nie rzuca kośćmi automatycznie (MG rzuca fizycznie, wpisuje wynik)
+- ❌ Nie jest pełną kartą postaci (brak: rasy, profesji, języków, reputacji)
+- ❌ Nie rzuca kośćmi automatycznie
 - ❌ Nie obsługuje systemu magii (moduł przyszłościowy)
-- ❌ Nie ma trybu dla graczy z edycją w czasie rzeczywistym (brak WebSocket na v1)
+- ❌ Nie ma trybu wieloosobowego w czasie rzeczywistym (brak WebSocket na v1)
 - ❌ Nie przechowuje danych postaci BG/BN w chmurze (tylko lokalnie)
 - ❌ Nie wymaga rejestracji / logowania
 
@@ -164,10 +204,10 @@ Interfejs administracyjny dostępny tylko dla właściciela aplikacji.
 | Kategoria | Wymaganie |
 |-----------|-----------|
 | **Wydajność** | Tooltips ładują się <300ms; dane słownikowe cache'owane lokalnie |
-| **Dostępność** | Aplikacja działa lokalnie bez internetu (poza tooltipami z DB) |
-| **Skalowalność** | Każdy MG trzyma swoje dane lokalnie — brak kosztów skalowania |
+| **Dostępność** | Tracker walki działa bez internetu; tooltips wymagają połączenia |
+| **Skalowalność** | Każdy MG trzyma swoje dane lokalnie — zero kosztów skalowania |
 | **Bezpieczeństwo** | Endpointy `/admin/*` chronione nagłówkiem `X-Admin-Secret` |
-| **Czytelność kodu** | Kod komentowany po angielsku, zrozumiały dla początkującego Pythonisty |
+| **Czytelność kodu** | Komentowany po angielsku, zrozumiały dla początkującego Pythonisty |
 | **Deployment** | Automatyczny deploy na Render.com po pushu do `main` |
 
 ---
@@ -178,111 +218,108 @@ Interfejs administracyjny dostępny tylko dla właściciela aplikacji.
 
 ```
 JSON (lokalny dysk)                 PostgreSQL (Supabase)
-─────────────────────────────────   ─────────────────────────────────
-Karty postaci BG i BN               Słownik umiejętności
-Stan aktywnej walki (sesja)         Słownik talentów
-Historia sesji                      Słownik cech broni
-Szablony przeciwników               Tabela akcji przewagi
+─────────────────────────────────   ──────────────────────────────────
+Karty postaci BG i BN               Słownik umiejętności (+ for_combat)
+Stan aktywnej walki (sesja)         Słownik talentów (+ for_combat,
+Historia sesji                        requires_momentum)
+Szablony przeciwników               Słownik cech przedmiotów (item_traits)
+                                    Tabela akcji przewagi (advantage_actions)
+                                    Tabela akcji Momentum (momentum_actions)
+                                    Słownik broni i pancerzy
 
 ZAPIS: aplikacja, zawsze            ZAPIS: tylko admin export
 ODCZYT: zawsze lokalny              ODCZYT: tooltips, lista słownikowa
 ```
 
-### 6.2 Format pliku postaci
+### 6.2 Szkic głównego widoku trackera
 
-Szczegółowy schemat JSON w `AGENTS.md` sekcja „Data Schemas".
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  WFRP Combat Tracker               Runda: 3   [Nowa walka] [Zapisz] │
+├─────────────────────────────────────┬────────────────────────────────┤
+│  Przewaga BG:  [−]  2  [+]  [ℹ]   │  Przewaga BN:  [−]  0  [+] [ℹ]│
+├──────┬──────────────────┬───────┬───┴──────────────┬───────────────┤
+│  #   │  Postać          │  Ini  │  Żywotność       │  Akcje        │
+├──────┼──────────────────┼───────┼──────────────────┼───────────────┤
+│  ▶1  │ 🟢 Ragnar Ż.P.  │  42   │ ████░░  11/14 [M✓]│ [Kond.▾] [↓] │
+│   2  │ 🔴 Wojow. Chaosu│  38   │ ██░░░░   5/12 [M✗]│ [Kond.▾] [↓] │
+│   3  │ 🟢 Elspeth v.D. │  35   │ █████░   9/9  [M✓]│ [Kond.▾] [↓] │
+│   4  │ ⚫ Szczuroludź   │  29   │ ░░░░░░   0/8  [M✗]│ [Kond.▾] [↓] │
+├──────┴──────────────────┴───────┴──────────────────┴───────────────┤
+│  [+ Dodaj uczestnika]           [Reset przewag]  [Następna tura ▶] │
+└──────────────────────────────────────────────────────────────────────┘
+
+[M✓] = postać posiada Momentum (tooltip z dostępnymi akcjami)
+[M✗] = postać nie posiada Momentum
+```
 
 ---
 
 ## 7. API — lista endpointów
-
-Szczegółowa tabela w `AGENTS.md` sekcja „API Endpoints".
 
 Zasady:
 - Wszystkie endpointy pod prefixem `/api/`
 - Odpowiedzi w formacie JSON
 - Kody HTTP: 200 OK, 201 Created, 404 Not Found, 422 Validation Error, 401 Unauthorized
 
----
-
-## 8. UI / UX — wytyczne
-
-### Główny widok walki (tracker)
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  WFRP Combat Tracker          Runda: 3    [Nowa walka] [Zapisz] │
-├──────┬────────────────┬───────┬──────────┬────────┬────────────┤
-│  #   │  Postać        │  Ini  │  Żyw     │ Przew. │  Akcje     │
-├──────┼────────────────┼───────┼──────────┼────────┼────────────┤
-│  ▶1  │ Ragnar Ż.P.    │  42   │ ████░ 11/14 │  [2] ─ + │ [↓] │
-│   2  │ Wojownik Chaosu│  38   │ ██░░░  5/12 │  [0] ─ + │ [↓] │
-│   3  │ Elspeth v.D.   │  35   │ █████  9/9  │  [1] ─ + │ [↓] │
-│   4  │ Szczuroludź    │  29   │ ░░░░░  0/8  │  [0] ─ + │ [↓] │
-├──────┴────────────────┴───────┴──────────┴────────┴────────────┤
-│  [+ Dodaj uczestnika]                    [Reset przewagi]       │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Wytyczne wizualne
-
-- Ciemny motyw (dark theme) — wygodny przy grze przy stole przy słabym oświetleniu
-- Duże, czytelne przyciski `+` i `−` dla żywotności i przewagi
-- Tooltip pojawia się po 200ms od najechania, znika po opuszczeniu
-- Widok responsywny — działa na tablecie GM (min. 768px szerokości)
-- Kondycje jako kolorowe badge (np. „Ogłuszony" na żółto)
+Szczegółowa tabela w `AGENTS.md` sekcja „API Endpoints".
 
 ---
 
-## 9. Plan wdrożenia — etapy
+## 8. Plan wdrożenia — etapy
 
-### Etap 0 — Fundament (tydzień 1)
-- [ ] Struktura projektu, Git, virtualenv
-- [ ] FastAPI z pierwszym endpointem `/health`
-- [ ] Połączenie z PostgreSQL (Supabase)
-- [ ] Schemat bazy danych (migracja SQL)
-- [ ] Podstawowe modele Pydantic
+### Etap 0 — Fundament ✅
+- [x] Struktura projektu, Git, virtualenv
+- [x] FastAPI z endpointem `/health`
+- [x] Połączenie z PostgreSQL (Supabase)
+- [x] Schemat bazy danych (migration_v1.sql)
+- [x] Podstawowe modele Pydantic
 
-### Etap 1 — Karty postaci (tydzień 2–3)
-- [ ] Schemat JSON postaci
-- [ ] Endpointy CRUD dla postaci (`/api/characters`)
-- [ ] Formularz tworzenia postaci (frontend)
-- [ ] Wyświetlanie karty postaci
+### Etap 1 — Karty postaci 🔄
+- [x] Modele Pydantic (CharacterCard, CharacterStats, itd.)
+- [x] CharacterService (zapis/odczyt JSON)
+- [x] Endpointy GET /api/characters/, GET /api/characters/{id}
+- [x] Endpoint POST /api/characters/
+- [ ] Endpoint PUT /api/characters/{id}
+- [ ] Endpoint DELETE /api/characters/{id}
 
-### Etap 2 — Słownik i tooltips (tydzień 3–4)
-- [ ] Wypełnienie bazy: umiejętności, talenty, cechy broni
-- [ ] Endpointy słownikowe (`/api/skills`, `/api/talents`, `/api/weapon-traits`)
+### Etap 2 — Słownik i tooltips
+- [ ] migration_v2.sql (momentum_actions, for_combat, requires_momentum)
+- [ ] Wypełnienie bazy: umiejętności, talenty, cechy broni, akcje Momentum
+- [ ] Endpointy słownikowe
 - [ ] System tooltipów w Alpine.js z cachowaniem
 
-### Etap 3 — Tracker walki (tydzień 5–6)
-- [ ] Schemat JSON sesji walki
+### Etap 3 — Tracker walki
+- [ ] Schemat JSON sesji walki (z group_advantage i momentum per postać)
 - [ ] Endpointy sesji (`/api/combat/sessions`)
 - [ ] Widok trackera z inicjatywą i żywotnością
-- [ ] System punktów przewagi z tabelą akcji
+- [ ] Znacznik Momentum per postać z tooltipem
+- [ ] Liczniki przewagi grupowej BG/BN
 
-### Etap 4 — Polish i deployment (tydzień 7–8)
+### Etap 4 — Polish i deployment
 - [ ] Dark theme, responsywność
 - [ ] Kondycje (dodawanie/usuwanie statusów)
 - [ ] Deploy na Render.com
-- [ ] Panel admina — eksport do PostgreSQL
+- [ ] Panel admina
 - [ ] README i dokumentacja
 
 ---
 
-## 10. Zależności zewnętrzne
+## 9. Zależności zewnętrzne
 
 | Usługa | Plan | Koszt | Do czego |
 |--------|------|-------|---------|
 | Supabase | Free tier | 0 PLN | PostgreSQL (słowniki) |
 | Render.com | Free tier | 0 PLN | Hosting backendu |
 | GitHub | Free | 0 PLN | Repozytorium, CI/CD |
-| Alpine.js | CDN | 0 PLN | Frontend (brak build step) |
+| Alpine.js | CDN | 0 PLN | Frontend |
 
 ---
 
-## 11. Otwarte pytania
+## 10. Otwarte pytania
 
-1. Czy kondycje (Stunned, Bleeding itd.) mają być predefiniowaną listą czy dowolnym tekstem?
-2. Czy tracker ma pamiętać historię obrażeń (kto ile zadał) w ramach sesji?
-3. Czy szablony przeciwników mają być dostępne publicznie (w bazie) czy tylko lokalnie?
-4. Czy aplikacja ma obsługiwać walki z wieloma grupami przeciwników (np. 3 Zbrojnych + 1 Mistrz Chaosu)?
+1. Czy kondycje mają być predefiniowaną listą czy dowolnym tekstem?
+2. Czy tracker ma pamiętać historię obrażeń w ramach sesji?
+3. Czy szablony przeciwników mają być dostępne publicznie (w bazie)?
+4. Czy aplikacja ma obsługiwać walki z wieloma grupami przeciwników?
+5. Czy wspierać przełącznik edycji (4ed / 5ed) w ustawieniach sesji?
