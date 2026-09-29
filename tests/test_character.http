@@ -1,13 +1,14 @@
-POST http://localhost:8000/api/characters/?card_type=players
+PUT  http://localhost:8000/api/characters/7e37d6d4-f1eb-45ee-be3e-35496c1e586b?card_type=players
 Content-Type: application/json
 
 {
+    "id": "7e37d6d4-f1eb-45ee-be3e-35496c1e586b",
     "name": "Brunon Witz",
     "type": "player",
     "character_stats": {
         "WS": 32, "BS": 44, "S": 31, "T": 28,
-        "I": 43, "Ag": 44, "Dex": 29, "Int": 58,
-        "WP": 49, "Fel": 36,
+        "I": 43, "Ag": 44, "Dex": 29, "Int": 68,
+        "WP": 79, "Fel": 46,
         "fate": 4, "fortune": 4,
         "resilience": 2, "determination": 2
     },

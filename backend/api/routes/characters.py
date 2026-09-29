@@ -29,4 +29,18 @@ def create_character(character_card: CharacterCard, card_type: str="players"):
     service.upload_character_to_json(data=character_card, card_type=card_type)
     return Response(status_code=201)
 
+
+@router.put("/{id}")
+def update_character(id: str, character_card: CharacterCard, card_type="players"):
+    file_name: str = str(id) + ".json"
+    path_to_file: Path = Path("data/characters") / card_type / file_name
+
+    if not path_to_file.exists():
+        raise HTTPException(status_code=404, detail="Postać nie istnieje")
+    if id != str(character_card.id):
+        raise HTTPException(status_code=400, detail="Bad request")
+
+    with open(path_to_file, 'w', encoding="utf-8") as file:
+        file.write(character_card.model_dump_json(indent=4))
+
     

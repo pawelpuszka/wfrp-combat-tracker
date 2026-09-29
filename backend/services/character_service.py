@@ -5,7 +5,7 @@ from backend.schemas.character_card import CharacterCard
 
 class CharacterService():
 
-    def read_character_from_json(self, path_to_file: str):
+    def read_character_from_json(self, path_to_file: str) -> CharacterCard:
         if not path_to_file.exists():
             raise FileNotFoundError(f"Plik {path_to_file} nie istnieje.")
         with open(path_to_file, 'r', encoding='utf-8') as file:
