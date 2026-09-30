@@ -43,4 +43,14 @@ def update_character(id: str, character_card: CharacterCard, card_type="players"
     with open(path_to_file, 'w', encoding="utf-8") as file:
         file.write(character_card.model_dump_json(indent=4))
 
-    
+
+@router.delete("/{id}")
+def remove_character(id: str, card_type: str="players"):
+    file_name = str(id) + ".json"
+    path_to_file: Path = Path("data/characters/") / card_type / file_name
+
+    if not path_to_file.exists():
+        raise HTTPException(status_code=404, detail="Postać nie istnieje")
+
+    path_to_file.unlink()
+    return Response(status_code=204)

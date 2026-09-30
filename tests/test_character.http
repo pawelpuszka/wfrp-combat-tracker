@@ -1,19 +1,21 @@
-PUT  http://localhost:8000/api/characters/7e37d6d4-f1eb-45ee-be3e-35496c1e586b?card_type=players
-Content-Type: application/json
+DELETE http://localhost:8000/api/characters/529784fc-879a-453c-b568-00b9d5a8fb65?card_type=players
 
-{
-    "id": "7e37d6d4-f1eb-45ee-be3e-35496c1e586b",
-    "name": "Brunon Witz",
-    "type": "player",
-    "character_stats": {
-        "WS": 32, "BS": 44, "S": 31, "T": 28,
-        "I": 43, "Ag": 44, "Dex": 29, "Int": 68,
-        "WP": 79, "Fel": 46,
-        "fate": 4, "fortune": 4,
-        "resilience": 2, "determination": 2
-    },
-    "skills": [],
-    "talents": [],
-    "weapons": [],
-    "armor": []
-}
+# PUT  http://localhost:8000/api/characters/7e37d6d4-f1eb-45ee-be3e-35496c1e586b?card_type=players
+# Content-Type: application/json
+
+# {
+#     "id": "7e37d6d4-f1eb-45ee-be3e-35496c1e586b",
+#     "name": "Brunon Witz",
+#     "type": "player",
+#     "character_stats": {
+#         "WS": 32, "BS": 44, "S": 31, "T": 28,
+#         "I": 43, "Ag": 44, "Dex": 29, "Int": 68,
+#         "WP": 79, "Fel": 46,
+#         "fate": 4, "fortune": 4,
+#         "resilience": 2, "determination": 2
+#     },
+#     "skills": [],
+#     "talents": [],
+#     "weapons": [],
+#     "armor": []
+# }
