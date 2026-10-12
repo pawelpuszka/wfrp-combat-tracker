@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response
 from pathlib import Path
-from  fastapi import HTTPException
+from fastapi import HTTPException
 from backend.services.character_service import CharacterService
 from backend.schemas.character_card import CharacterCard 
 
