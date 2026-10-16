@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS talents (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100)    NOT NULL UNIQUE,
     description TEXT            NOT NULL,
-    max_rank    VARCHAR(50),
+    max_rank    VARCHAR(100),
     tests       VARCHAR(200),
     source      VARCHAR(50)     DEFAULT 'WFRP4e Core'
 );
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS talents (
 
 -- -------------------------------------------------------------
 -- ITEM TRAITS
--- Individual traits that can be assigned to items.
+-- Individual traits that can be assigned to items and weapons
 -- has_rating: some traits have a numeric rating e.g. "Obuchowa 1"
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS trait_categories (
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS item_traits (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100)    NOT NULL UNIQUE,
     description     TEXT            NOT NULL,
-    category_id     INT             NOT NULL REFERENCES trait_categories(id),
+    category_id     INT             REFERENCES trait_categories(id),
     is_advantage    BOOLEAN         DEFAULT TRUE,
     has_rating      BOOLEAN         DEFAULT FALSE,
     trait_rating    INT,
@@ -105,7 +105,8 @@ INSERT INTO weapon_categories (name) VALUES
     ('Prochowa'),
     ('Łuki'),
     ('Kusze'),
-    ('Eksperymentalne'),
+    ('Eksperymentalna'),
+    ('Oplątująca'),
     ('Materiały wybuchowe'),
     ('Proce'),
     ('Miotana')
@@ -124,7 +125,7 @@ ON CONFLICT (name) DO NOTHING;
 CREATE TABLE IF NOT EXISTS weapons (
     id                   SERIAL PRIMARY KEY,
     name                 VARCHAR(100)    NOT NULL UNIQUE,
-    category_id          INT             NOT NULL REFERENCES weapon_categories(id),
+    category_id          INT             REFERENCES weapon_categories(id),
     damage               INT             NOT NULL,
     uses_strength_bonus  BOOLEAN         DEFAULT FALSE,
     reach                VARCHAR(50),
@@ -198,8 +199,8 @@ CREATE TABLE IF NOT EXISTS armors (
     category_id          INT             NOT NULL REFERENCES armor_categories(id),
     penalty              INT,
     penalty_stat         varchar(10),
-    protected_location   varchar[], --jeden armor może chronić kilka lokacji    
-    armor_points         INT,              
+    protected_location   varchar[], --jeden armor może chronić kilka lokacji
+    armor_points         INT,
     availability         VARCHAR(50),
     price_gc             INT,
     price_ss             INT,
@@ -234,4 +235,4 @@ CREATE TABLE IF NOT EXISTS conditions (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100),
     description TEXT
-);  
+);

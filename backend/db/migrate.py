@@ -9,7 +9,7 @@ def migrate_db(file):
     print("Migracja z pliku: ", file)
     with open(file, 'r', encoding="UTF-8") as f:
         file_content = f.read()
-    statements = sqlparse.split(file_content) 
+    statements = sqlparse.split(file_content)
     with engine.connect() as conn:
         for statement in statements:
             conn.execute(text(statement))
